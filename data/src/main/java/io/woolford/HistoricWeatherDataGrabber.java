@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.logging.Logger;
 
@@ -38,6 +39,7 @@ public class HistoricWeatherDataGrabber {
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(ftpNoaaHost, 21);
         ftpClient.login("anonymous", "guest");
+        ftpClient.setDataTimeout(600000);
 
         for (YearRecord yearRecord : dbMapper.getIncompleteYearsRecords()){
 

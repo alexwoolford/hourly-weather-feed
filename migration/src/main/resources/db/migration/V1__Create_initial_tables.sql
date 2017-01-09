@@ -2,7 +2,7 @@ USE hourly_weather_feed;
 
 CREATE TABLE hourly_weather_feed (
   wbanno INT,
-  utcTime TIMESTAMP,
+  utcTime DATETIME,
   crxVn DOUBLE,
   longitude DOUBLE,
   latitude DOUBLE,
@@ -59,6 +59,6 @@ INSERT INTO years (year, complete) VALUES (2012, TRUE );
 INSERT INTO years (year, complete) VALUES (2013, TRUE );
 INSERT INTO years (year, complete) VALUES (2014, TRUE );
 INSERT INTO years (year, complete) VALUES (2015, TRUE );
-INSERT INTO years (year, complete) VALUES (2016, TRUE );
+INSERT INTO years (year, complete) VALUES (2016, FALSE );
 INSERT INTO years (year, complete) VALUES (2017, FALSE );
 
