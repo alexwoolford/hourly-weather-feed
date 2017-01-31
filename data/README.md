@@ -4,7 +4,8 @@ The data module collects the data, every hour, from NOAA's FTP site.
 
 To run this application:
 
-    nohup mvn spring-boot:run &
+    mvn clean package
+    nohup ./target/data-1.0-SNAPSHOT.jar &
 
 Logs for this application are written to `/var/log/hourly-weather-feed`.
 
