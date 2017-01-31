@@ -5,7 +5,6 @@ import io.woolford.database.entity.WeatherRecord;
 import io.woolford.database.mapper.DbMapper;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -29,29 +29,6 @@ class FileLoader {
         this.dbMapper = dbMapper;
     }
 
-//    @Scheduled(fixedDelay = 10000L)
-//    private void readFileLineByLine() {
-//
-//        String fileName = "/tmp/CRNH0203-2017-AK_Barrow_4_ENE.txt";
-//
-//        //read file into stream, try-with-resources
-//        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-//
-//            stream.forEach((line)->{
-//                try {
-//                    insertRecord(line);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-
     void loadFile(String fileName){
 
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
@@ -60,13 +37,15 @@ class FileLoader {
                 try {
                     insertRecord(line);
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    logger.log(Level.WARNING, e.getMessage());
                 }
             });
 
+            logger.info("Loaded file: " + fileName);
+
         } catch (IOException e) {
-            //TODO: log error, don't just print it
             e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 

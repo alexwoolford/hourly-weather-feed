@@ -38,6 +38,8 @@ CREATE TABLE hourly_weather_feed (
   soilTemp100 DOUBLE
 );
 
+CREATE UNIQUE INDEX hourly_weather_feed_wbanno_utcTime_idx ON hourly_weather_feed (wbanno, utcTime);
+
 CREATE TABLE years (
   year INT,
   complete BOOLEAN
@@ -59,6 +61,6 @@ INSERT INTO years (year, complete) VALUES (2012, TRUE );
 INSERT INTO years (year, complete) VALUES (2013, TRUE );
 INSERT INTO years (year, complete) VALUES (2014, TRUE );
 INSERT INTO years (year, complete) VALUES (2015, TRUE );
-INSERT INTO years (year, complete) VALUES (2016, FALSE );
+INSERT INTO years (year, complete) VALUES (2016, TRUE );
 INSERT INTO years (year, complete) VALUES (2017, FALSE );
 

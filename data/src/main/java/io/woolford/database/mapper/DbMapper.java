@@ -129,17 +129,41 @@ public interface DbMapper {
             "     #{soilTemp10},      " +
             "     #{soilTemp20},      " +
             "     #{soilTemp50},      " +
-            "     #{soilTemp100})     ")
+            "     #{soilTemp100})     " +
+            "ON DUPLICATE KEY UPDATE                  " +
+            "     crxVn=#{crxVn},                     " +
+            "     longitude=#{longitude},             " +
+            "     latitude=#{latitude},               " +
+            "     tCalc=#{tCalc},                     " +
+            "     tHrAvg=#{tHrAvg},                   " +
+            "     tMax=#{tMax},                       " +
+            "     tMin=#{tMin},                       " +
+            "     pCalc=#{pCalc},                     " +
+            "     solarad=#{solarad},                 " +
+            "     solaradFlag=#{solaradFlag},         " +
+            "     solaradMax=#{solaradMax},           " +
+            "     solaradMaxFlag=#{solaradMaxFlag},   " +
+            "     solaradMin=#{solaradMin},           " +
+            "     solaradMinFlag=#{solaradMinFlag},   " +
+            "     surTempType=#{surTempType},         " +
+            "     surTemp=#{surTemp},                 " +
+            "     surTempFlag=#{surTempFlag},         " +
+            "     surTempMax=#{surTempMax},           " +
+            "     surTempMaxFlag=#{surTempMaxFlag},   " +
+            "     surTempMin=#{surTempMin},           " +
+            "     surTempMinFlag=#{surTempMinFlag},   " +
+            "     rhHrAvg=#{rhHrAvg},                 " +
+            "     rhHrAvgFlag=#{rhHrAvgFlag},         " +
+            "     soilMoisture5=#{soilMoisture5},     " +
+            "     soilMoisture10=#{soilMoisture10},   " +
+            "     soilMoisture20=#{soilMoisture20},   " +
+            "     soilMoisture50=#{soilMoisture50},   " +
+            "     soilMoisture100=#{soilMoisture100}, " +
+            "     soilTemp5=#{soilTemp5},             " +
+            "     soilTemp10=#{soilTemp10},           " +
+            "     soilTemp20=#{soilTemp20},           " +
+            "     soilTemp50=#{soilTemp50},           " +
+            "     soilTemp100=#{soilTemp100}          ")
     public void insertWeatherRecord(WeatherRecord weatherRecord);
-
-//    @Select("SELECT ticker FROM backtesting_the_dow.tickers ")
-//    public List<TickerRecord> getTickers();
-//
-//    @Insert("INSERT INTO backtesting_the_dow.intra_day                                                        " +
-//            "    (`datetime`, `close`, `high`, `low`, `open`, `volume`, `ticker`)                             " +
-//            "VALUES                                                                                           " +
-//            "    (#{datetime}, #{close}, #{high}, #{low}, #{open}, #{volume}, #{ticker})                      " +
-//            "ON DUPLICATE KEY UPDATE close=#{close}, high=#{high}, low=#{low}, open=#{open}, volume=#{volume} ")
-//    public void insertIntradayRecord(IntradayRecord intradayRecord);
 
 }
