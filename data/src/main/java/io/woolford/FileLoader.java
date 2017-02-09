@@ -19,10 +19,12 @@ import java.util.stream.Stream;
 @Component
 class FileLoader {
 
-    static Logger logger = Logger.getLogger(FileLoader.class.getName());
+    private static Logger logger = Logger.getLogger(FileLoader.class.getName());
 
-    final
-    DbMapper dbMapper;
+    private long loadedCount;
+    private long errorCount;
+
+    final private DbMapper dbMapper;
 
     @Autowired
     public FileLoader(DbMapper dbMapper) {
@@ -31,6 +33,10 @@ class FileLoader {
 
     void loadFile(String fileName){
 
+        loadedCount = 0;
+        errorCount = 0;
+
+        logger.info("Loading file: " + fileName);
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
 
             stream.forEach((line)->{
@@ -41,56 +47,66 @@ class FileLoader {
                 }
             });
 
-            logger.info("Loaded file: " + fileName);
+            logger.info("File " + fileName + " loaded successfully.");
 
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.log(Level.SEVERE, "Error loading file: " + fileName + "; " + e.getMessage());
+        } finally {
+            logger.info("File " + fileName + ": " + loadedCount + " records loaded; " + errorCount + " errors.");
         }
     }
 
     private void insertRecord(String recordRaw) throws ParseException {
 
         String[] recordArray = recordRaw.split("[ ]+");
-
         WeatherRecord weatherRecord = new WeatherRecord();
-        weatherRecord.setWbanno(Integer.parseInt(recordArray[0]));
-        weatherRecord.setUtcTime(parseDateHour(recordArray[1], recordArray[2]));
-        weatherRecord.setCrxVn(Double.parseDouble(recordArray[5]));
-        weatherRecord.setLongitude(Double.parseDouble(recordArray[6]));
-        weatherRecord.setLatitude(Double.parseDouble(recordArray[7]));
-        weatherRecord.settCalc(Double.parseDouble(recordArray[8]));
-        weatherRecord.settHrAvg(Double.parseDouble(recordArray[9]));
-        weatherRecord.settMax(Double.parseDouble(recordArray[10]));
-        weatherRecord.settMin(Double.parseDouble(recordArray[11]));
-        weatherRecord.setpCalc(Double.parseDouble(recordArray[12]));
-        weatherRecord.setSolarad(Integer.parseInt(recordArray[13]));
-        weatherRecord.setSolaradFlag(Integer.parseInt(recordArray[14]));
-        weatherRecord.setSolaradMax(Integer.parseInt(recordArray[15]));
-        weatherRecord.setSolaradMaxFlag(Integer.parseInt(recordArray[16]));
-        weatherRecord.setSolaradMin(Integer.parseInt(recordArray[17]));
-        weatherRecord.setSolaradMinFlag(Integer.parseInt(recordArray[18]));
-        weatherRecord.setSurTempType(recordArray[19]);
-        weatherRecord.setSurTemp(Double.parseDouble(recordArray[20]));
-        weatherRecord.setSurTempFlag(Integer.parseInt(recordArray[21]));
-        weatherRecord.setSurTempMax(Double.parseDouble(recordArray[22]));
-        weatherRecord.setSurTempMaxFlag(Integer.parseInt(recordArray[23]));
-        weatherRecord.setSurTempMin(Double.parseDouble(recordArray[24]));
-        weatherRecord.setSurTempMinFlag(Integer.parseInt(recordArray[25]));
-        weatherRecord.setRhHrAvg(Integer.parseInt(recordArray[26]));
-        weatherRecord.setRhHrAvgFlag(Integer.parseInt(recordArray[27]));
-        weatherRecord.setSoilMoisture5(Double.parseDouble(recordArray[28]));
-        weatherRecord.setSoilMoisture10(Double.parseDouble(recordArray[29]));
-        weatherRecord.setSoilMoisture20(Double.parseDouble(recordArray[30]));
-        weatherRecord.setSoilMoisture50(Double.parseDouble(recordArray[31]));
-        weatherRecord.setSoilMoisture100(Double.parseDouble(recordArray[32]));
-        weatherRecord.setSoilTemp5(Double.parseDouble(recordArray[33]));
-        weatherRecord.setSoilTemp10(Double.parseDouble(recordArray[34]));
-        weatherRecord.setSoilTemp20(Double.parseDouble(recordArray[35]));
-        weatherRecord.setSoilTemp50(Double.parseDouble(recordArray[36]));
-        weatherRecord.setSoilTemp100(Double.parseDouble(recordArray[37]));
 
-        dbMapper.insertWeatherRecord(weatherRecord);
+        try {
+
+            weatherRecord.setWbanno(Integer.parseInt(recordArray[0]));
+            weatherRecord.setUtcTime(parseDateHour(recordArray[1], recordArray[2]));
+            weatherRecord.setCrxVn(Double.parseDouble(recordArray[5]));
+            weatherRecord.setLongitude(Double.parseDouble(recordArray[6]));
+            weatherRecord.setLatitude(Double.parseDouble(recordArray[7]));
+            weatherRecord.settCalc(Double.parseDouble(recordArray[8]));
+            weatherRecord.settHrAvg(Double.parseDouble(recordArray[9]));
+            weatherRecord.settMax(Double.parseDouble(recordArray[10]));
+            weatherRecord.settMin(Double.parseDouble(recordArray[11]));
+            weatherRecord.setpCalc(Double.parseDouble(recordArray[12]));
+            weatherRecord.setSolarad(Integer.parseInt(recordArray[13]));
+            weatherRecord.setSolaradFlag(Integer.parseInt(recordArray[14]));
+            weatherRecord.setSolaradMax(Integer.parseInt(recordArray[15]));
+            weatherRecord.setSolaradMaxFlag(Integer.parseInt(recordArray[16]));
+            weatherRecord.setSolaradMin(Integer.parseInt(recordArray[17]));
+            weatherRecord.setSolaradMinFlag(Integer.parseInt(recordArray[18]));
+            weatherRecord.setSurTempType(recordArray[19]);
+            weatherRecord.setSurTemp(Double.parseDouble(recordArray[20]));
+            weatherRecord.setSurTempFlag(Integer.parseInt(recordArray[21]));
+            weatherRecord.setSurTempMax(Double.parseDouble(recordArray[22]));
+            weatherRecord.setSurTempMaxFlag(Integer.parseInt(recordArray[23]));
+            weatherRecord.setSurTempMin(Double.parseDouble(recordArray[24]));
+            weatherRecord.setSurTempMinFlag(Integer.parseInt(recordArray[25]));
+            weatherRecord.setRhHrAvg(Integer.parseInt(recordArray[26]));
+            weatherRecord.setRhHrAvgFlag(Integer.parseInt(recordArray[27]));
+            weatherRecord.setSoilMoisture5(Double.parseDouble(recordArray[28]));
+            weatherRecord.setSoilMoisture10(Double.parseDouble(recordArray[29]));
+            weatherRecord.setSoilMoisture20(Double.parseDouble(recordArray[30]));
+            weatherRecord.setSoilMoisture50(Double.parseDouble(recordArray[31]));
+            weatherRecord.setSoilMoisture100(Double.parseDouble(recordArray[32]));
+            weatherRecord.setSoilTemp5(Double.parseDouble(recordArray[33]));
+            weatherRecord.setSoilTemp10(Double.parseDouble(recordArray[34]));
+            weatherRecord.setSoilTemp20(Double.parseDouble(recordArray[35]));
+            weatherRecord.setSoilTemp50(Double.parseDouble(recordArray[36]));
+            weatherRecord.setSoilTemp100(Double.parseDouble(recordArray[37]));
+
+            dbMapper.insertWeatherRecord(weatherRecord);
+            loadedCount++;
+
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Error " + e.getMessage() + " loading weather record " + weatherRecord.toString());
+            errorCount++;
+        }
+
 
     }
 

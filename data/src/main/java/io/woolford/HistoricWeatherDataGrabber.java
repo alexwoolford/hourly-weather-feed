@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.logging.Logger;
 
 @Component
 public class HistoricWeatherDataGrabber {
 
-    static Logger logger = Logger.getLogger(HistoricWeatherDataGrabber.class.getName());
+    private static Logger logger = Logger.getLogger(HistoricWeatherDataGrabber.class.getName());
 
     private final DbMapper dbMapper;
     private final FileLoader fileLoader;
@@ -34,6 +35,8 @@ public class HistoricWeatherDataGrabber {
 
     @Scheduled(cron = "0 0 * * * *") //run every hour
     private void grabHistoricWeatherData() throws IOException {
+
+        logger.info("Starting data acquisition run.");
 
         FTPClient ftpClient = new FTPClient();
         ftpClient.connect(ftpNoaaHost, 21);
